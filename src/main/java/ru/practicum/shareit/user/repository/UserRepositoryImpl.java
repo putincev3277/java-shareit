@@ -37,14 +37,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findByName(String name) {
-        return users.values().stream()
-                .filter(u -> u.getName() != null && u.getName().equals(name))
-                .findFirst()
-                .orElse(null);
-    }
-
-    @Override
     public User findByEmail(String email) {
         // сравнение без учёта регистра: правило проекта для дубликатов email
         if (email == null) {

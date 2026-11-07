@@ -47,4 +47,19 @@ public class ItemRepositoryImpl implements ItemRepository {
     public void delete(Long id) {
         items.remove(id);
     }
+
+    @Override
+    public List<Item> search(String text) {
+        String searchText = text.toLowerCase();
+        return items.values().stream()
+                .filter(Item::isAvailable)
+                .filter(i -> contains(i.getName(), searchText)
+                        || contains(i.getDescription(), searchText))
+                .collect(Collectors.toList());
+    }
+
+    private boolean contains(String value, String searchText) {
+        return value != null && value.toLowerCase().contains(searchText);
+    }
+
 }

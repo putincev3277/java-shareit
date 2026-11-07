@@ -42,9 +42,7 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> searchUsers(@RequestParam(required = false) String nameFragment) {
-        if (nameFragment == null || nameFragment.isBlank()) {
-            return userService.searchUsers("");
-        }
         return userService.searchUsers(nameFragment);
     }
+
 }

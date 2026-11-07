@@ -113,30 +113,21 @@ class ItemServiceImplTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    void searchItems_byName_ignoresCaseAndReturnsOnlyAvailable() {
-        Item drill = new Item(10L, OWNER_ID, "Дрель", "Мощная дрель", true, null);
-        Item unavailable = new Item(11L, OWNER_ID, "Дрель строительная", "Профессиональная", false, null);
-        Item other = new Item(12L, OWNER_ID, "Отвёртка", "Набор", true, null);
-        when(itemRepository.findAll()).thenReturn(List.of(drill, unavailable, other));
-
-        List<ItemDto> result = itemService.searchItems("ДРЕЛЬ");
-
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getName()).isEqualTo("Дрель");
-    }
 
     @Test
-    void searchItems_byDescription_ignoresCase() {
+    void searchItems_returnsMappedDtos() {
         Item drill = new Item(10L, OWNER_ID, "Отвёртка", "Может заменить ДРЕЛЬ", true, null);
         Item other = new Item(11L, OWNER_ID, "Ключ", "Гаечный", true, null);
-        when(itemRepository.findAll()).thenReturn(List.of(drill, other));
+        when(itemRepository.search("дрель")).thenReturn(List.of(drill, other));
 
         List<ItemDto> result = itemService.searchItems("дрель");
 
-        assertThat(result).hasSize(1);
+        assertThat(result).hasSize(2); // сколько дал репозиторий — столько и вернул сервис
+        assertThat(result.get(0).getId()).isEqualTo(10L);
         assertThat(result.get(0).getName()).isEqualTo("Отвёртка");
     }
+
+
 
     @Test
     void searchItems_blankText_returnsEmptyList() {

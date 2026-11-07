@@ -94,4 +94,28 @@ class ItemRepositoryImplTest {
                 .extracting(Item::getName)
                 .containsExactlyInAnyOrder("Drill", "Ladder");
     }
+
+    @Test
+    void search_byDescription_ignoresCase() {
+        repository.save(new Item(null, 1L, "Отвёртка", "Может заменить ДРЕЛЬ", true, null));
+        repository.save(new Item(null, 1L, "Ключ", "Гаечный", true, null));
+        repository.save(new Item(null, 1L, "Дрель", "Мощная", false, null)); // недоступная
+
+        List<Item> result = repository.search("дрель");
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getName()).isEqualTo("Отвёртка");
+    }
+
+    @Test
+    void search_byName_ignoresCase() {
+        repository.save(new Item(null, 1L, "ДРЕЛЬ ударная", "Мощная", true, null));
+        repository.save(new Item(null, 1L, "Ключ", "Гаечный", true, null));
+
+        List<Item> result = repository.search("дрель");
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getName()).isEqualTo("ДРЕЛЬ ударная");
+    }
+
 }
