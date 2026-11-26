@@ -1,18 +1,16 @@
 package ru.practicum.shareit.user.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.user.model.User;
+
 import java.util.List;
 
-public interface UserRepository {
-    User save(User user);
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findById(Long id);
+    @Query("SELECT u FROM User u WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :nameFragment, '%'))")
+    List<User> findByNameContainingIgnoreCase(@Param("nameFragment") String nameFragment);
 
-    List<User> findAll();
-
-    List<User> findByNameContaining(String nameFragment);
-
-    void delete(Long id);
-
-    User findByEmail(String email);
+    boolean existsByEmail(String email);
 }
