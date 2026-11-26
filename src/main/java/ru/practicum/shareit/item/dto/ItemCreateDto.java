@@ -18,4 +18,5 @@ public class ItemCreateDto {
 
     @NotNull(message = "Поле available обязательно для заполнения")
     private Boolean available;
+
 }

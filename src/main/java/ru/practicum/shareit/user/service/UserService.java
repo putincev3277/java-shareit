@@ -1,7 +1,9 @@
 package ru.practicum.shareit.user.service;
 
+import jakarta.validation.Valid;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserUpdateDto;
 
 import java.util.List;
 
@@ -11,42 +13,31 @@ import java.util.List;
 public interface UserService {
 
     /**
-     * Создаёт нового пользователя.
-     *
-     * @param dto данные нового пользователя
-     * @return созданный пользователь
-     */
-    UserDto create(UserCreateDto dto);
-
-    /**
      * Возвращает пользователя по идентификатору.
      *
-     * @param userId идентификатор пользователя
+     * @param id идентификатор пользователя
      * @return пользователь
      */
-    UserDto getUserById(Long userId);
+    UserDto getUserById(Long id);
 
     /**
-     * Частично обновляет пользователя: null-поля игнорируются.
+     * Обновляет данные пользователя.
+     * Переданные null и пустые строки не затирают существующие значения.
      *
-     * @param userId идентификатор пользователя
-     * @param dto    поля для обновления
+     * @param id  идентификатор пользователя
+     * @param dto новые данные пользователя
      * @return обновлённый пользователь
      */
-    UserDto updateUser(Long userId, UserDto dto);
-
-    /**
-     * Ищет пользователей по фрагменту имени.
-     *
-     * @param nameFragment фрагмент имени для поиска
-     * @return список найденных пользователей
-     */
-    List<UserDto> searchUsers(String nameFragment);
+    UserDto updateUser(Long id, @Valid UserUpdateDto dto);
 
     /**
      * Удаляет пользователя по идентификатору.
      *
-     * @param userId идентификатор пользователя
+     * @param id идентификатор пользователя
      */
-    void deleteUser(Long userId);
+    void deleteUser(Long id);
+
+    UserDto create(UserCreateDto dto);
+
+    List<UserDto> searchUsers(String nameFragment);
 }
